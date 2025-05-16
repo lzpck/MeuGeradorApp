@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Queries SQL para Campos Extras</title>
+    <link rel="stylesheet" href="gerador_query_campo_extra.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Gerador de Queries SQL para Campos Extras</h1>
+            <p>Preencha o formulário abaixo para gerar automaticamente a query SQL de inclusão de campo extra.</p>
+        </header>
+
+        <form id="formCampoExtra">
+            <!-- Campos Identificadores -->
+            <section class="form-section">
+                <h2>Campos Identificadores</h2>
+                <div class="form-group campo-obrigatorio">
+                    <label for="ds_label">Nome que aparece na interface:</label>
+                    <span class="tooltip">
+                        <span class="icone-info">?</span>
+                        <span class="texto-tooltip">Este é o texto que será exibido para o usuário no formulário. Exemplo: "Nome Completo", "E-mail", "Telefone".</span>
+                    </span>
+                    <input type="text" id="ds_label" name="ds_label" required placeholder="Ex: Nome Completo">
+                </div>
+                <div class="form-group campo-obrigatorio">
+                    <label for="id_key">Código interno (gerado automaticamente):</label>
+                    <span class="tooltip">
+                        <span class="icone-info">?</span>
+                        <span class="texto-tooltip">Este código é gerado automaticamente a partir do nome do campo. É usado internamente pelo sistema.</span>
+                    </span>
+                    <input type="text" id="id_key" name="id_key" readonly>
+                </div>
+            </section>
+
+            <!-- Módulos -->
+            <section class="form-section">
+                <h2>Módulo</h2>
+                <div class="form-group campo-obrigatorio">
+                    <label for="modulo">Módulo onde o campo deve aparecer:</label>
+                    <span class="tooltip">
+                        <span class="icone-info">?</span>
+                        <span class="texto-tooltip">Selecione o módulo do sistema onde este campo deve ser exibido. A seção onde o campo aparece depende do módulo selecionado.</span>
+                    </span>
+                    <select id="modulo" name="modulo" required>
+                        <option value="">-- Selecione um módulo --</option>
+                        <option value="CURSO">CURSO</option>
+                        <option value="TURMA">TURMA</option>
+                        <option value="USUARIO">USUARIO</option>
+                        <option value="UNIDADE">UNIDADE</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- Campos de Configuração -->
+            <section class="form-section">
+                <h2>Campos de Configuração</h2>
+                <div class="form-group">
+                    <label for="id_fieldset">Seção onde o campo deve aparecer:</label>
+                    <span class="tooltip">
+                        <span class="icone-info">?</span>
+                        <span class="texto-tooltip">Escolha em qual seção do formulário este campo será exibido. Se não tiver certeza, use "Informações Adicionais".</span>
+                    </span>
+                    <select id="id_fieldset" name="id_fieldset">
+                        <option value="">-- Selecione uma seção --</option>
+                        <option value="0">Dados Pessoais</option>
+                        <option value="1">Informações Adicionais</option>
+                        <option value="2">Informações Profissionais</option>
+                        <option value="3">Informações Corporativas</option>
+                        <option value="4">Forçar Edição</option>
+                        <option value="5">Dados de Segurança</option>
+                        <option value="6">Edição de Dados Mobile</option>
+                    </select>
+                </div>
+                <div class="form-group campo-obrigatorio">
+                    <label for="id_tipo">Tipo do campo:</label>
+                    <span class="tooltip">
+                        <span class="icone-info">?</span>
+                        <span class="texto-tooltip">Escolha o tipo de entrada que o usuário irá preencher. Texto curto para respostas breves, texto longo para descrições, data para datas, etc.</span>
+                    </span>
+                    <select id="id_tipo" name="id_tipo" required>
+                        <option value="">-- Selecione um tipo --</option>
+                        <option value="0">TEXTO CURTO</option>
+                        <option value="3">BOTÕES DE OPÇÃO (RADIO BUTTON)</option>
+                        <option value="7">CAIXA DE SELEÇÃO (CHECKBOX)</option>
+                        <option value="8">LISTA SUSPENSA (LISTBOX)</option>
+
+                    </select>
+                </div>
+                <div class="form-group campo-obrigatorio">
+                    <label for="nr_posicao">Posição do campo na página:</label>
+                    <span class="tooltip">
+                        <span class="icone-info">?</span>
+                        <span class="texto-tooltip">Número que define a ordem em que este campo aparecerá no formulário. Campos com números menores aparecem primeiro.</span>
+                    </span>
+                    <input type="number" id="nr_posicao" name="nr_posicao" min="1" value="1" required>
+                </div>
+            </section>
+
+            <!-- Campos de Permissão -->
+            <section class="form-section">
+                <h2>Permissões</h2>
+                <div class="form-group">
+                    <label for="id_perm_admin">Permissão para Administradores:</label>
+                    <span class="tooltip">
+                        <span class="icone-info">?</span>
+                        <span class="texto-tooltip">Define o que administradores podem fazer com este campo:<br>- NENHUMA: não podem ver nem editar<br>- LEITURA: podem apenas visualizar<br>- ESCRITA: podem visualizar e editar</span>
+                    </span>
+                    <select id="id_perm_admin" name="id_perm_admin" required>
+                        <option value="0">NENHUMA</option>
+                        <option value="1">LEITURA</option>
+                        <option value="2" selected>ESCRITA</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="id_perm_usuario">Permissão para Usuários:</label>
+                    <span class="tooltip">
+                        <span class="icone-info">?</span>
+                        <span class="texto-tooltip">Define o que usuários comuns podem fazer com este campo:<br>- NENHUMA: não podem ver nem editar<br>- LEITURA: podem apenas visualizar<br>- ESCRITA: podem visualizar e editar</span>
+                    </span>
+                    <select id="id_perm_usuario" name="id_perm_usuario" required>
+                        <option value="0">NENHUMA</option>
+                        <option value="1">LEITURA</option>
+                        <option value="2">ESCRITA</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- Campos Booleanos -->
+            <section class="form-section">
+                <h2>Configurações Adicionais</h2>
+                <p class="form-hint">Marque as opções desejadas para este campo:</p>
+                <div class="checkbox-grid">
+                    <div class="form-check">
+                        <input type="checkbox" id="id_ecommerce" name="id_ecommerce" value="1">
+                        <label for="id_ecommerce">Aparece no e-commerce</label>
+                        <span class="tooltip">
+                            <span class="icone-info">?</span>
+                            <span class="texto-tooltip">Se marcado, este campo será exibido na loja virtual (e-commerce).</span>
+                        </span>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="id_obrigatorio" name="id_obrigatorio" value="1">
+                        <label for="id_obrigatorio">Campo obrigatório</label>
+                        <span class="tooltip">
+                            <span class="icone-info">?</span>
+                            <span class="texto-tooltip">Se marcado, o usuário será obrigado a preencher este campo.</span>
+                        </span>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="id_pesquisa" name="id_pesquisa" value="1">
+                        <label for="id_pesquisa">Aparece nas pesquisas</label>
+                        <span class="tooltip">
+                            <span class="icone-info">?</span>
+                            <span class="texto-tooltip">Se marcado, este campo poderá ser usado como filtro em pesquisas.</span>
+                        </span>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="id_relatorio" name="id_relatorio" value="1">
+                        <label for="id_relatorio">Aparece nos relatórios</label>
+                        <span class="tooltip">
+                            <span class="icone-info">?</span>
+                            <span class="texto-tooltip">Se marcado, este campo será exibido nos relatórios gerados pelo sistema.</span>
+                        </span>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="id_campopadrao" name="id_campopadrao" value="1">
+                        <label for="id_campopadrao">Campo padrão</label>
+                        <span class="tooltip">
+                            <span class="icone-info">?</span>
+                            <span class="texto-tooltip">Se marcado, este campo será considerado um campo padrão do sistema.</span>
+                        </span>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="id_campounico" name="id_campounico" value="1">
+                        <label for="id_campounico">Valor único</label>
+                        <span class="tooltip">
+                            <span class="icone-info">?</span>
+                            <span class="texto-tooltip">Se marcado, o sistema não permitirá valores repetidos neste campo.</span>
+                        </span>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="id_certificado" name="id_certificado" value="1">
+                        <label for="id_certificado">Aparece nos certificados</label>
+                        <span class="tooltip">
+                            <span class="icone-info">?</span>
+                            <span class="texto-tooltip">Se marcado, este campo poderá ser incluído em certificados gerados pelo sistema.</span>
+                        </span>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="id_token_msg_automatica" name="id_token_msg_automatica" value="1">
+                        <label for="id_token_msg_automatica">Token em mensagens</label>
+                        <span class="tooltip">
+                            <span class="icone-info">?</span>
+                            <span class="texto-tooltip">Se marcado, o valor deste campo poderá ser incluído em mensagens automáticas.</span>
+                        </span>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="id_forcar_edicao" name="id_forcar_edicao" value="1">
+                        <label for="id_forcar_edicao">Força edição</label>
+                        <span class="tooltip">
+                            <span class="icone-info">?</span>
+                            <span class="texto-tooltip">Se marcado, o sistema forçará o usuário a editar este campo em determinadas situações.</span>
+                        </span>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="id_listapresenca" name="id_listapresenca" value="1">
+                        <label for="id_listapresenca">Lista de presença</label>
+                        <span class="tooltip">
+                            <span class="icone-info">?</span>
+                            <span class="texto-tooltip">Se marcado, este campo será exibido em listas de presença.</span>
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Campos Descritivos -->
+            <section class="form-section">
+                <h2>Campos Descritivos</h2>
+                <p class="form-hint">Campos opcionais. Deixe em branco se não for necessário.</p>
+                <div class="form-group">
+                    <label for="ds_mask">Máscara para entrada de dados:</label>
+                    <span class="tooltip">
+                        <span class="icone-info">?</span>
+                        <span class="texto-tooltip">Define um formato específico para o campo. Exemplo: (99) 9999-9999 para telefone, onde 9 representa um dígito.</span>
+                    </span>
+                    <input type="text" id="ds_mask" name="ds_mask" placeholder="Ex: (99) 9999-9999">
+                </div>
+                <div class="form-group">
+                    <label for="ds_placeholder">Texto de exemplo:</label>
+                    <span class="tooltip">
+                        <span class="icone-info">?</span>
+                        <span class="texto-tooltip">Texto de exemplo que aparece no campo antes do usuário digitar. Exemplo: "Digite seu email".</span>
+                    </span>
+                    <input type="text" id="ds_placeholder" name="ds_placeholder" placeholder="Ex: Digite seu email">
+                </div>
+                <div class="form-group">
+                    <label for="ds_value_default">Valor padrão:</label>
+                    <span class="tooltip">
+                        <span class="icone-info">?</span>
+                        <span class="texto-tooltip">Valor que aparecerá preenchido automaticamente no campo. Exemplo: "Selecione uma opção".</span>
+                    </span>
+                    <input type="text" id="ds_value_default" name="ds_value_default" placeholder="Ex: Selecione uma opção">
+                </div>
+            </section>
+
+            <!-- Esta seção foi movida para o início do formulário e transformada em um dropdown -->
+
+            <!-- Opções de Seleção (condicional) -->
+            <section class="form-section" id="secaoOpcoes" style="display: none;">
+                <h2>Opções de Seleção</h2>
+                <p class="form-hint">Adicione as opções que o usuário poderá selecionar.</p>
+                <span class="tooltip">
+                    <span class="icone-info">?</span>
+                    <span class="texto-tooltip">Para campos do tipo BOTÕES DE OPÇÃO, LISTA SUSPENSA, CHECKBOX, etc., você precisa adicionar as opções que o usuário poderá escolher. Exemplo: "Sim", "Não", "Talvez".</span>
+                </span>
+                <div id="opcoes-container">
+                    <div class="form-group opcao-grupo">
+                        <input type="text" class="opcao-input" placeholder="Digite uma opção">
+                        <button type="button" class="btn-remover-opcao">Remover</button>
+                    </div>
+                </div>
+                <button type="button" id="btn-adicionar-opcao" class="btn-secundario">Adicionar Opção</button>
+            </section>
+
+            <!-- Botões de Ação -->
+            <div class="form-actions">
+                <button type="button" id="btn-limpar" class="btn-secundario">Limpar Formulário</button>
+                <button type="button" id="btn-gerar" class="btn-primario">Gerar SQL</button>
+            </div>
+        </form>
+
+        <!-- Resultado SQL -->
+        <section id="resultado" class="form-section" style="display: none;">
+            <h2>SQL Gerado</h2>
+            <div class="sql-container">
+                <pre id="sql-output"></pre>
+                <button type="button" id="btn-copiar" class="btn-secundario">Copiar SQL</button>
+            </div>
+        </section>
+    </div>
+
+    <script src="gerador_query_campo_extra.js"></script>
+</body>
+</html>
